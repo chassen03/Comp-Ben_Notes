@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decoding Job Evaluation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        pop: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            900: '#701a75',
+                        },
+                        electric: {
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hover-pop {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-pop:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom timeline styles */
+        .timeline-line {
+            position: absolute;
+            left: 1.25rem;
+            top: 2rem;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+        @media (min-width: 768px) {
+            .timeline-line {
+                left: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-pop-500 selection:text-white">
+
+    <!-- Hero Section -->
+    <header class="relative bg-slate-900 text-white overflow-hidden py-24 px-6">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-pop-900 to-electric-600 opacity-90"></div>
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
+        
+        <div class="relative z-10 max-w-5xl mx-auto text-center">
+            <span class="inline-block py-2 px-5 rounded-full bg-white/10 text-pop-100 text-xs font-bold uppercase tracking-widest mb-6 border border-white/20 backdrop-blur-md">
+                The Basics of Compensation
+            </span>
+            <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-6 leading-tight">
+                Putting a Price <br /> on <span class="bg-gradient-to-r from-pop-400 to-electric-500 gradient-text">Work.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 font-medium max-w-2xl mx-auto">
+                No more guesswork. No more intuition. Discover how objective Job Evaluation creates fair pay, boosts efficiency, and ensures internal equity.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-16 space-y-24">
+        
+        <!-- Section: What is it? & The Reality Check -->
+        <section class="relative">
+            <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-100 -mt-24 relative z-20">
+                
+                <!-- Definition -->
+                <div class="flex flex-col md:flex-row gap-10 items-center mb-16">
+                    <div class="md:w-1/3 flex justify-center">
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-pop-400 to-electric-500 flex items-center justify-center shadow-lg shadow-pop-500/30">
+                            <i class="ph-fill ph-magnifying-glass text-white text-6xl"></i>
+                        </div>
+                    </div>
+                    <div class="md:w-2/3">
+                        <h2 class="text-3xl font-extrabold text-slate-800 mb-4">So, what actually <em class="text-pop-600 not-italic">is</em> Job Evaluation?</h2>
+                        <p class="text-slate-600 text-lg leading-relaxed mb-4">
+                            Put simply, it is a systematic process intended to provide a rational, orderly hierarchy of jobs based on their worth to the company.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Fact vs Fiction Grid -->
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-800 mb-6 flex items-center gap-2">
+                        <i class="ph-fill ph-scales text-pop-500 text-2xl"></i> The Reality Check: Is vs. Is Not
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Row 1 -->
+                        <div class="p-5 bg-pop-50 border-l-4 border-pop-500 rounded-r-xl shadow-sm">
+                            <p class="font-bold text-pop-900 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-check-circle text-pop-500 text-lg mt-0.5 shrink-0"></i>
+                                A complete review of a position and the work done by the position.
+                            </p>
+                        </div>
+                        <div class="p-5 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl shadow-sm opacity-80">
+                            <p class="font-medium text-slate-600 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-x-circle text-slate-400 text-lg mt-0.5 shrink-0"></i>
+                                It does NOT consider the individual in the position or their performance.
+                            </p>
+                        </div>
+
+                        <!-- Row 2 -->
+                        <div class="p-5 bg-pop-50 border-l-4 border-pop-500 rounded-r-xl shadow-sm">
+                            <p class="font-bold text-pop-900 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-check-circle text-pop-500 text-lg mt-0.5 shrink-0"></i>
+                                Considers the contribution of the position to the overall organization.
+                            </p>
+                        </div>
+                        <div class="p-5 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl shadow-sm opacity-80">
+                            <p class="font-medium text-slate-600 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-x-circle text-slate-400 text-lg mt-0.5 shrink-0"></i>
+                                It is NOT a measure of how well the person in the position is performing.
+                            </p>
+                        </div>
+
+                        <!-- Row 3 -->
+                        <div class="p-5 bg-pop-50 border-l-4 border-pop-500 rounded-r-xl shadow-sm">
+                            <p class="font-bold text-pop-900 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-check-circle text-pop-500 text-lg mt-0.5 shrink-0"></i>
+                                A measure to ensure internal equity—compensating relative contribution consistently.
+                            </p>
+                        </div>
+                        <div class="p-5 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl shadow-sm opacity-80">
+                            <p class="font-medium text-slate-600 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-x-circle text-slate-400 text-lg mt-0.5 shrink-0"></i>
+                                It is NOT a measure of salary competitiveness outside the organization.
+                            </p>
+                        </div>
+
+                        <!-- Row 4 -->
+                        <div class="p-5 bg-pop-50 border-l-4 border-pop-500 rounded-r-xl shadow-sm">
+                            <p class="font-bold text-pop-900 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-check-circle text-pop-500 text-lg mt-0.5 shrink-0"></i>
+                                Evaluates contribution internal to the organization.
+                            </p>
+                        </div>
+                        <div class="p-5 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl shadow-sm opacity-80">
+                            <p class="font-medium text-slate-600 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-x-circle text-slate-400 text-lg mt-0.5 shrink-0"></i>
+                                Does NOT care how other companies measure the contribution of similar positions.
+                            </p>
+                        </div>
+
+                        <!-- Row 5 -->
+                        <div class="p-5 bg-pop-50 border-l-4 border-pop-500 rounded-r-xl shadow-sm">
+                            <p class="font-bold text-pop-900 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-check-circle text-pop-500 text-lg mt-0.5 shrink-0"></i>
+                                A nuanced process involving several components and related factors.
+                            </p>
+                        </div>
+                        <div class="p-5 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl shadow-sm opacity-80">
+                            <p class="font-medium text-slate-600 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-x-circle text-slate-400 text-lg mt-0.5 shrink-0"></i>
+                                It is NOT a simple manual with check boxes to instantly finalize a rating.
+                            </p>
+                        </div>
+
+                        <!-- Row 6 -->
+                        <div class="p-5 bg-pop-50 border-l-4 border-pop-500 rounded-r-xl shadow-sm">
+                            <p class="font-bold text-pop-900 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-check-circle text-pop-500 text-lg mt-0.5 shrink-0"></i>
+                                Involves ongoing consultation between the employee, supervisors, and HR.
+                            </p>
+                        </div>
+                        <div class="p-5 bg-slate-50 border-l-4 border-slate-300 rounded-r-xl shadow-sm opacity-80">
+                            <p class="font-medium text-slate-600 flex gap-2 items-start text-sm">
+                                <i class="ph-bold ph-x-circle text-slate-400 text-lg mt-0.5 shrink-0"></i>
+                                It is NOT one person in HR making a final decision in a silo without consultation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: Why it Matters -->
+        <section>
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-black text-slate-800">Why Does It Matter?</h2>
+                <p class="text-slate-500 mt-3 font-medium">Building a culture of trust and fairness.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover-pop text-center relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-electric-50 rounded-bl-full -z-10 transition-transform group-hover:scale-150"></div>
+                    <i class="ph-duotone ph-scales text-5xl text-electric-500 mb-6 inline-block"></i>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Fair & Transparent</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Evaluates roles within established parameters. Because the process is consistent, employees and managers know exactly how decisions are made, drastically reducing pay disputes.
+                    </p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover-pop text-center relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-pop-50 rounded-bl-full -z-10 transition-transform group-hover:scale-150"></div>
+                    <i class="ph-duotone ph-users-three text-5xl text-pop-500 mb-6 inline-block"></i>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Talent & Succession</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        A clearly mapped job architecture optimizes talent management. If directors see there is no natural successor for a role, they can proactively put plans in place early.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover-pop text-center relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-rose-50 rounded-bl-full -z-10 transition-transform group-hover:scale-150"></div>
+                    <i class="ph-duotone ph-shield-check text-5xl text-rose-500 mb-6 inline-block"></i>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Equitable & Legal</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Avoids wage discrimination based on gender, race, or age. It enriches the talent pool, builds a positive culture, and keeps the organization out of court with a hefty legal bill.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: When Should It Occur -->
+        <section class="bg-slate-100 rounded-3xl p-8 md:p-12 border border-slate-200">
+            <div class="mb-10 text-center">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-200 text-slate-700 text-xs font-bold uppercase tracking-widest mb-4">
+                    <i class="ph-fill ph-clock"></i> Timing is Everything
+                </span>
+                <h2 class="text-3xl md:text-4xl font-black text-slate-800">When Should Job Evaluation Occur?</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Trigger 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="w-10 h-10 rounded-full bg-electric-100 flex items-center justify-center text-electric-600 mb-4">
+                        <i class="ph-bold ph-trend-up text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Significant Changes</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        When there are significant changes to duties and responsibilities that impact rating factors (e.g., taking on supervision when it wasn't a prior responsibility).
+                    </p>
+                </div>
+                <!-- Trigger 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="w-10 h-10 rounded-full bg-pop-100 flex items-center justify-center text-pop-600 mb-4">
+                        <i class="ph-bold ph-sparkle text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">New Positions</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        If a position is relatively new or unrated. They are initially tentatively rated, but over time as the position becomes defined, an evaluation validates the true rating.
+                    </p>
+                </div>
+                <!-- Trigger 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 mb-4">
+                        <i class="ph-bold ph-hourglass text-xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Substantive Evolution</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        While time alone isn't a reason, working in a role over an extended period often leads to substantive changes in duties, processes, and interactions.
+                    </p>
+                </div>
+            </div>
+
+            <!-- The Exception -->
+            <div class="bg-slate-800 text-white p-6 rounded-2xl flex flex-col md:flex-row items-center gap-6 shadow-lg">
+                <div class="shrink-0 bg-rose-500 w-12 h-12 rounded-full flex items-center justify-center">
+                    <i class="ph-bold ph-warning text-2xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-1">What does NOT trigger a re-evaluation?</h4>
+                    <p class="text-slate-300 text-sm">
+                        An increase in the <strong>volume or amount</strong> of work being performed is <em>not</em> a consideration for re-evaluation as long as the type of duties performed are still the same. Minor changes also do not qualify.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Process Timeline -->
+        <section>
+            <div class="mb-12">
+                <h2 class="text-4xl font-black text-slate-800 mb-4">The Job Evaluation Journey</h2>
+                <p class="text-slate-500 font-medium text-lg">A structured, multi-step process involving the employee, management, and HR.</p>
+            </div>
+
+            <div class="relative pl-6 md:pl-10">
+                <!-- Timeline Line -->
+                <div class="timeline-line"></div>
+
+                <!-- Phase 1 -->
+                <div class="relative z-10 mb-12">
+                    <div class="absolute -left-6 md:-left-10 w-8 h-8 rounded-full bg-electric-500 border-4 border-slate-50 flex items-center justify-center shadow-sm">
+                        <i class="ph-bold ph-pencil-simple text-white text-xs"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 ml-4">Phase 1: Preparation & Approval</h3>
+                    <div class="ml-4 space-y-4">
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-electric-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 1</span>
+                            <p class="text-sm text-slate-700">The employee reviews the duties of their position. If there is a significant change (or it's unrated), the employee completes the <strong>Job Fact Sheet (JFS)</strong>.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-electric-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 2</span>
+                            <p class="text-sm text-slate-700">The employee submits the JFS to their supervisor or manager for review and signature. (The manager may recommend changes prior to signing).</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-electric-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 3</span>
+                            <p class="text-sm text-slate-700">The signed JFS is then submitted to the dean/director for their review and final managerial signature.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="relative z-10 mb-12">
+                    <div class="absolute -left-6 md:-left-10 w-8 h-8 rounded-full bg-pop-500 border-4 border-slate-50 flex items-center justify-center shadow-sm">
+                        <i class="ph-bold ph-paper-plane-tilt text-white text-xs"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 ml-4">Phase 2: Submission & Initial Review</h3>
+                    <div class="ml-4 space-y-4">
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-pop-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 4</span>
+                            <p class="text-sm text-slate-700">The employee submits the fully signed JFS (with org chart) to Human Resources (via my.mun.ca "Submit a Case" or in-person at MyHR). <em>Note: Any reclassification action is effective the date it is received by MyHR.</em></p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-pop-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 5</span>
+                            <p class="text-sm text-slate-700">MyHR sends an email confirmation of receipt with the effective date. The JFS is forwarded to the appropriate HR advisor.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-pop-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 6</span>
+                            <p class="text-sm text-slate-700">The HR advisor conducts an initial review to ensure changes are genuinely significant compared to the previous JFS. If not, the employee is notified in writing.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-pop-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 7</span>
+                            <p class="text-sm text-slate-700">The HR advisor schedules the full review. This may take <strong>6-12 months</strong> depending on volume. <em>Important: Any substantial changes occurring during this waiting period are not considered; a subsequent JFS would be needed.</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="relative z-10 mb-12">
+                    <div class="absolute -left-6 md:-left-10 w-8 h-8 rounded-full bg-emerald-500 border-4 border-slate-50 flex items-center justify-center shadow-sm">
+                        <i class="ph-bold ph-magnifying-glass text-white text-xs"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 ml-4">Phase 3: The Deep Dive</h3>
+                    <div class="ml-4 space-y-4">
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-emerald-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 8</span>
+                            <p class="text-sm text-slate-700">The HR advisor schedules individual meetings with the employee, supervisor, and dean to clarify questions, provide examples, and fully explain the work of the position.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-emerald-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 9</span>
+                            <p class="text-sm text-slate-700">The position is formally rated within Human Resources in consultation with the job design and evaluation consultant utilizing Memorial’s application of the <strong>Aiken Plan</strong>.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-emerald-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 10</span>
+                            <p class="text-sm text-slate-700">A characterization of the position (an overview relating to the nine factors of the Aiken Plan) is prepared and submitted to the dean/director for review.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="relative z-10">
+                    <div class="absolute -left-6 md:-left-10 w-8 h-8 rounded-full bg-rose-500 border-4 border-slate-50 flex items-center justify-center shadow-sm">
+                        <i class="ph-bold ph-flag-checkered text-white text-xs"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-4 ml-4">Phase 4: Results & Next Steps</h3>
+                    <div class="ml-4 space-y-4">
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop">
+                            <span class="text-rose-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 11</span>
+                            <p class="text-sm text-slate-700">Once confirmed, ratings are finalized and results are released to the employee via a <strong>Notification of Results</strong>.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop border-l-4 border-l-emerald-400">
+                            <span class="text-rose-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 12a (Success)</span>
+                            <p class="text-sm text-slate-700">If the employee is satisfied that the key functions were accurately captured, any required changes to adjust title, job class, and/or salary are processed.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover-pop border-l-4 border-l-rose-400">
+                            <span class="text-rose-500 font-bold text-xs uppercase tracking-wider mb-1 block">Step 12b (Appeals)</span>
+                            <p class="text-sm text-slate-700">If unsatisfied, the employee must complete a <strong>Request for Appeal</strong> within <strong>10 business days</strong>. They must first meet with their HR advisor/consultant to review how the Aiken Plan was applied. No salary or title changes are processed until the appeal is completed.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: The Showdown (Analytical vs Non-Analytical) -->
+        <section class="bg-slate-900 rounded-3xl p-10 md:p-16 text-white relative overflow-hidden shadow-2xl">
+            <div class="absolute -right-20 -bottom-20 opacity-10">
+                <i class="ph-fill ph-sword text-[300px]"></i>
+            </div>
+            
+            <div class="relative z-10">
+                <h2 class="text-3xl md:text-4xl font-black mb-10 text-center">
+                    Is All Job Evaluation Equal? <br/>
+                    <span class="text-rose-400">Absolutely Not.</span>
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Non-Analytical -->
+                    <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/10 hover:border-rose-400/50 transition-colors">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="ph-fill ph-thumbs-down text-3xl text-rose-400"></i>
+                            <h3 class="text-2xl font-bold">Non-Analytical</h3>
+                        </div>
+                        <h4 class="text-rose-300 text-sm font-bold uppercase tracking-wider mb-2">Example: Paired Ranking</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Compares a "whole-job" to other "whole-jobs" without breaking the role down into smaller demands. Creates a simple highest-to-lowest hierarchy.
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-400 font-medium">
+                            <li class="flex items-center gap-2"><i class="ph-bold ph-x text-rose-400"></i> Inherently biased</li>
+                            <li class="flex items-center gap-2"><i class="ph-bold ph-x text-rose-400"></i> No objective scoring system</li>
+                            <li class="flex items-center gap-2"><i class="ph-bold ph-x text-rose-400"></i> Will NOT stand up in an equal pay trial</li>
+                        </ul>
+                    </div>
+
+                    <!-- Analytical -->
+                    <div class="bg-gradient-to-br from-pop-900 to-electric-900 p-8 rounded-2xl border border-pop-400/30 shadow-[0_0_30px_rgba(217,70,239,0.2)]">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="ph-fill ph-star text-3xl text-pop-400"></i>
+                            <h3 class="text-2xl font-bold">Analytical</h3>
+                        </div>
+                        <h4 class="text-pop-300 text-sm font-bold uppercase tracking-wider mb-2">Example: Point-Factor</h4>
+                        <p class="text-slate-200 text-sm leading-relaxed mb-4">
+                            A quantitative form of evaluation that breaks jobs down into smaller components using defined factors (like the Aiken Plan). Assigns points based on the relevant level required.
+                        </p>
+                        <ul class="space-y-2 text-sm text-pop-100 font-medium">
+                            <li class="flex items-center gap-2"><i class="ph-bold ph-check text-pop-400"></i> Highly consistent & objective</li>
+                            <li class="flex items-center gap-2"><i class="ph-bold ph-check text-pop-400"></i> The most reliable way to assess equal value</li>
+                            <li class="flex items-center gap-2"><i class="ph-bold ph-check text-pop-400"></i> Translates easily into grade structures</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-50 border-t border-slate-200 py-10 text-center">
+        <p class="text-slate-500 text-sm font-medium">
+            © 2026 HR & Compensation Best Practices. <br/>
+            <span class="text-xs text-slate-400 mt-2 block">Ensuring internal equity and organizational clarity.</span>
+        </p>
+    </footer>
+
+</body>
+</html>

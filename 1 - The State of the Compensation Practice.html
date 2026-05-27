@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compensation Practice Mastery</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .accordion-content {
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-in-out, padding 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.open {
+            max-height: 2500px;
+            opacity: 1;
+        }
+        .chevron {
+            transition: transform 0.3s ease-in-out;
+        }
+        .chevron.open {
+            transform: rotate(180deg);
+        }
+        
+        /* Modal Animations */
+        #modal-backdrop {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #modal-panel {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .interactive-card {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #14b8a6;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen selection:bg-brand-500 selection:text-white relative">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-br from-slate-900 via-slate-800 to-brand-900 text-white py-20 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div class="max-w-5xl mx-auto relative z-10 text-center">
+            <span class="inline-block py-1.5 px-4 rounded-full bg-brand-500/20 text-brand-100 text-sm font-semibold mb-6 border border-brand-500/30 shadow-sm backdrop-blur-sm">
+                A Structured Learning Guide
+            </span>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                The Evolution of <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-100 to-brand-400">Compensation Practice</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 font-light max-w-3xl mx-auto leading-relaxed">
+                Compensation is not just about salaries. It is an organizational operating system. 
+                Click on any component below to access its extreme-depth tactical analysis. <strong class="text-white">Let's make you the most dangerous Total Rewards strategist in the boardroom.</strong>
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Interactive Framework -->
+    <main class="max-w-5xl mx-auto px-6 py-12">
+        
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800">The 5 Mature Ecosystem Pillars</h2>
+                <p class="text-sm text-slate-500 mt-1">Click a pillar to expand, then click internal cards for deep dives.</p>
+            </div>
+            <button onclick="toggleAll()" id="toggleAllBtn" class="text-sm font-semibold text-brand-700 hover:text-white hover:bg-brand-600 transition-colors bg-brand-50 border border-brand-200 px-5 py-2.5 rounded-lg shadow-sm">
+                Expand All Pillars
+            </button>
+        </div>
+
+        <div class="space-y-6" id="accordion-container">
+            
+            <!-- SECTION 1: EXPERTISE -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-300 group/card">
+                <button onclick="toggleCard('card1', 'icon1')" class="w-full px-6 py-6 text-left flex justify-between items-center focus:outline-none">
+                    <div class="flex items-center gap-5">
+                        <div class="bg-blue-50 text-blue-600 p-4 rounded-2xl group-hover/card:bg-blue-600 group-hover/card:text-white transition-colors duration-300">
+                            <i class="ph ph-brain text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">1. Expertise</h3>
+                            <p class="text-sm text-slate-500 font-medium mt-1">The Foundation of Compensation Capability</p>
+                        </div>
+                    </div>
+                    <i id="icon1" class="ph ph-caret-down text-2xl text-slate-400 chevron"></i>
+                </button>
+                <div id="card1" class="accordion-content px-6 bg-slate-50">
+                    <div class="py-8 border-t border-slate-200">
+                        
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-8 flex gap-4 items-start">
+                            <i class="ph ph-lightbulb text-2xl text-amber-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-slate-800">The Formula 1 Analogy</h4>
+                                <p class="text-sm text-slate-600 mt-1">Imagine giving a Formula 1 car to someone who just got their learner's permit in Gurgaon peak traffic. The machine is incredibly powerful, but the operator is absolutely going to crash. Without expertise, even the most brilliant frameworks collapse into chaos. <strong>You are here to become the master operator.</strong></p>
+                            </div>
+                        </div>
+
+                        <h4 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">The Four Levels of Expertise (Click to Expand)</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                            <div onclick="openModal('exp_basic')" class="interactive-card bg-white p-4 rounded-xl border border-slate-200 flex flex-col items-center text-center">
+                                <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded mb-2 w-full">1. Basic</span>
+                                <h5 class="font-bold text-slate-800 text-sm">Line Managers</h5>
+                            </div>
+                            <div onclick="openModal('exp_operational')" class="interactive-card bg-white p-4 rounded-xl border border-slate-200 flex flex-col items-center text-center">
+                                <span class="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-1 rounded mb-2 w-full">2. Operational</span>
+                                <h5 class="font-bold text-slate-800 text-sm">HR Generalists</h5>
+                            </div>
+                            <div onclick="openModal('exp_tactical')" class="interactive-card bg-white p-4 rounded-xl border border-slate-200 flex flex-col items-center text-center">
+                                <span class="bg-indigo-100 text-indigo-600 text-xs font-bold px-2 py-1 rounded mb-2 w-full">3. Tactical</span>
+                                <h5 class="font-bold text-slate-800 text-sm">Comp Professionals</h5>
+                            </div>
+                            <div onclick="openModal('exp_strategic')" class="interactive-card bg-white p-4 rounded-xl border border-slate-200 flex flex-col items-center text-center">
+                                <span class="bg-purple-100 text-purple-600 text-xs font-bold px-2 py-1 rounded mb-2 w-full">4. Strategic</span>
+                                <h5 class="font-bold text-slate-800 text-sm">Leaders/Experts</h5>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">6 Core Building Blocks</h4>
+                                <ul class="space-y-2">
+                                    <li onclick="openModal('bb_base')" class="interactive-card flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-brand-50">
+                                        <span class="flex items-center gap-2"><i class="ph-fill ph-money text-brand-500"></i> Base Pay Design</span>
+                                        <i class="ph ph-arrow-right text-slate-400"></i>
+                                    </li>
+                                    <li onclick="openModal('bb_variable')" class="interactive-card flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-brand-50">
+                                        <span class="flex items-center gap-2"><i class="ph-fill ph-trend-up text-brand-500"></i> Variable Pay Design</span>
+                                        <i class="ph ph-arrow-right text-slate-400"></i>
+                                    </li>
+                                    <li onclick="openModal('bb_strategy')" class="interactive-card flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-brand-50">
+                                        <span class="flex items-center gap-2"><i class="ph-fill ph-strategy text-brand-500"></i> Business Strategy Integration</span>
+                                        <i class="ph ph-arrow-right text-slate-400"></i>
+                                    </li>
+                                    <li onclick="openModal('bb_legal')" class="interactive-card flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-brand-50">
+                                        <span class="flex items-center gap-2"><i class="ph-fill ph-scales text-brand-500"></i> Legal Compliance</span>
+                                        <i class="ph ph-arrow-right text-slate-400"></i>
+                                    </li>
+                                    <li onclick="openModal('bb_comm')" class="interactive-card flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-brand-50">
+                                        <span class="flex items-center gap-2"><i class="ph-fill ph-chats text-brand-500"></i> Pay Communication</span>
+                                        <i class="ph ph-arrow-right text-slate-400"></i>
+                                    </li>
+                                    <li onclick="openModal('bb_total')" class="interactive-card flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-brand-50">
+                                        <span class="flex items-center gap-2"><i class="ph-fill ph-gift text-brand-500"></i> Total Rewards Program</span>
+                                        <i class="ph ph-arrow-right text-slate-400"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">8 Differentiators of Top Performers</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <button onclick="openModal('diff_tech')" class="interactive-card px-4 py-2 bg-slate-200 text-slate-700 text-sm font-semibold rounded-full hover:bg-brand-100 hover:text-brand-700 flex items-center gap-1">Technical Mastery <i class="ph ph-info text-xs"></i></button>
+                                    <button onclick="openModal('diff_strategic')" class="interactive-card px-4 py-2 bg-slate-200 text-slate-700 text-sm font-semibold rounded-full hover:bg-brand-100 hover:text-brand-700 flex items-center gap-1">Strategic Understanding <i class="ph ph-info text-xs"></i></button>
+                                    <button onclick="openModal('diff_analytics')" class="interactive-card px-4 py-2 bg-slate-200 text-slate-700 text-sm font-semibold rounded-full hover:bg-brand-100 hover:text-brand-700 flex items-center gap-1">Analytical Skills <i class="ph ph-info text-xs"></i></button>
+                                    <button onclick="openModal('diff_comm')" class="interactive-card px-4 py-2 bg-slate-200 text-slate-700 text-sm font-semibold rounded-full hover:bg-brand-100 hover:text-brand-700 flex items-center gap-1">Communication <i class="ph ph-info text-xs"></i></button>
+                                    <button onclick="openModal('diff_adapt')" class="interactive-card px-4 py-2 bg-slate-200 text-slate-700 text-sm font-semibold rounded-full hover:bg-brand-100 hover:text-brand-700 flex items-center gap-1">Adaptability <i class="ph ph-info text-xs"></i></button>
+                                    <button onclick="openModal('diff_passion')" class="interactive-card px-4 py-2 bg-slate-200 text-slate-700 text-sm font-semibold rounded-full hover:bg-brand-100 hover:text-brand-700 flex items-center gap-1">Passion & Proactivity <i class="ph ph-info text-xs"></i></button>
+                                    <button onclick="openModal('diff_learning')" class="interactive-card px-4 py-2 bg-slate-200 text-slate-700 text-sm font-semibold rounded-full hover:bg-brand-100 hover:text-brand-700 flex items-center gap-1">Continuous Learning <i class="ph ph-info text-xs"></i></button>
+                                    <button onclick="openModal('diff_dev')" class="interactive-card px-4 py-2 bg-brand-100 border border-brand-300 text-brand-800 text-sm font-semibold rounded-full hover:bg-brand-500 hover:text-white flex items-center gap-1">Development Systems <i class="ph-bold ph-cursor-click text-xs"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: METHODOLOGIES -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-300 group/card">
+                <button onclick="toggleCard('card2', 'icon2')" class="w-full px-6 py-6 text-left flex justify-between items-center focus:outline-none">
+                    <div class="flex items-center gap-5">
+                        <div class="bg-emerald-50 text-emerald-600 p-4 rounded-2xl group-hover/card:bg-emerald-600 group-hover/card:text-white transition-colors duration-300">
+                            <i class="ph ph-files text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">2. Codified Methodologies</h3>
+                            <p class="text-sm text-slate-500 font-medium mt-1">Turning Knowledge into Systems</p>
+                        </div>
+                    </div>
+                    <i id="icon2" class="ph ph-caret-down text-2xl text-slate-400 chevron"></i>
+                </button>
+                <div id="card2" class="accordion-content px-6 bg-slate-50">
+                    <div class="py-8 border-t border-slate-200">
+                        
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-8 flex gap-4 items-start">
+                            <i class="ph ph-road-horizon text-2xl text-slate-600 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-slate-800">The Road Builder Analogy</h4>
+                                <p class="text-sm text-slate-600 mt-1">If every manager decided salaries based on instinct, the organization would quickly devolve into a political nightmare and a legal landmine. Codification is like <strong>building highways</strong> instead of asking every driver to blindly off-road their way to the office. Structure equals scale.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div onclick="openModal('meth_phil')" class="interactive-card bg-white border border-slate-200 rounded-xl p-5 shadow-sm text-center">
+                                <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold mx-auto mb-3">1</div>
+                                <h4 class="text-lg font-bold text-slate-800 mb-1">Philosophy</h4>
+                                <p class="text-sm text-slate-500">The moral and strategic backbone.</p>
+                                <span class="text-brand-600 text-xs font-bold mt-3 inline-block">Click for details →</span>
+                            </div>
+
+                            <div onclick="openModal('meth_strat')" class="interactive-card bg-white border border-brand-200 rounded-xl p-5 shadow-md ring-1 ring-brand-100 text-center">
+                                <div class="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold mx-auto mb-3">2</div>
+                                <h4 class="text-lg font-bold text-slate-800 mb-1">Strategy (5 Elements)</h4>
+                                <p class="text-sm text-slate-500">The Execution Blueprint.</p>
+                                <span class="text-brand-600 text-xs font-bold mt-3 inline-block">Click for 5 Elements →</span>
+                            </div>
+
+                            <div onclick="openModal('meth_admin')" class="interactive-card bg-white border border-slate-200 rounded-xl p-5 shadow-sm text-center">
+                                <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold mx-auto mb-3">3</div>
+                                <h4 class="text-lg font-bold text-slate-800 mb-1">Administration</h4>
+                                <p class="text-sm text-slate-500">Daily operational machinery.</p>
+                                <span class="text-brand-600 text-xs font-bold mt-3 inline-block">Click for details →</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: DECISION TOOLS -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-300 group/card">
+                <button onclick="toggleCard('card3', 'icon3')" class="w-full px-6 py-6 text-left flex justify-between items-center focus:outline-none">
+                    <div class="flex items-center gap-5">
+                        <div class="bg-purple-50 text-purple-600 p-4 rounded-2xl group-hover/card:bg-purple-600 group-hover/card:text-white transition-colors duration-300">
+                            <i class="ph ph-map-trifold text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">3. Decision-Making Tools</h3>
+                            <p class="text-sm text-slate-500 font-medium mt-1">Converting Complexity into Intelligent Action</p>
+                        </div>
+                    </div>
+                    <i id="icon3" class="ph ph-caret-down text-2xl text-slate-400 chevron"></i>
+                </button>
+                <div id="card3" class="accordion-content px-6 bg-slate-50">
+                    <div class="py-8 border-t border-slate-200 flex flex-col md:flex-row gap-8 items-center">
+                        
+                        <div class="md:w-1/2">
+                            <h4 class="text-lg font-bold text-slate-800 mb-2">The Navigation Systems</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                There is no universally perfect compensation model. Applying hyper-growth startup OKRs to a legacy steel plant is like putting a neon spoiler on a tractor—it just doesn't work. Tools help you select the exact methodology that matches your company's DNA.
+                            </p>
+                            <button onclick="openModal('dt_tools')" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-purple-600 hover:text-white transition-colors">
+                                View Industry Examples
+                            </button>
+                        </div>
+
+                        <div class="md:w-1/2 w-full">
+                            <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">The 3 Critical Questions</h4>
+                            <ul class="space-y-3 w-full">
+                                <li onclick="openModal('q_exist')" class="interactive-card flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg font-bold text-slate-800 shadow-sm">
+                                    <span>1. Why does the program exist?</span>
+                                    <i class="ph ph-magnifying-glass text-brand-500"></i>
+                                </li>
+                                <li onclick="openModal('q_meaning')" class="interactive-card flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg font-bold text-slate-800 shadow-sm">
+                                    <span>2. Why is it meaningful?</span>
+                                    <i class="ph ph-magnifying-glass text-brand-500"></i>
+                                </li>
+                                <li onclick="openModal('q_advantage')" class="interactive-card flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg font-bold text-slate-800 shadow-sm">
+                                    <span>3. How does it create advantage?</span>
+                                    <i class="ph ph-magnifying-glass text-brand-500"></i>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: DATABASES & BIG DATA -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-300 group/card">
+                <button onclick="toggleCard('card4', 'icon4')" class="w-full px-6 py-6 text-left flex justify-between items-center focus:outline-none">
+                    <div class="flex items-center gap-5">
+                        <div class="bg-rose-50 text-rose-600 p-4 rounded-2xl group-hover/card:bg-rose-600 group-hover/card:text-white transition-colors duration-300">
+                            <i class="ph ph-database text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">4. Databases and Big Data</h3>
+                            <p class="text-sm text-slate-500 font-medium mt-1">Building Compensation Intelligence</p>
+                        </div>
+                    </div>
+                    <i id="icon4" class="ph ph-caret-down text-2xl text-slate-400 chevron"></i>
+                </button>
+                <div id="card4" class="accordion-content px-6 bg-slate-50">
+                    <div class="py-8 border-t border-slate-200">
+                        
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-8 flex gap-4 items-start">
+                            <i class="ph ph-activity text-2xl text-rose-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-slate-800">The Intelligence Analogy</h4>
+                                <p class="text-sm text-slate-600 mt-1">Data abundance causes cognitive overload. If data just tells you "who left," it's small data. If it connects business outcomes, culture, and pay to tell you <em>why</em> they left (and quietly judges your 2 AM biryani habits), it becomes Big Data. Let's turn you into a talent mind-reader.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-800 mb-4">5 Practical Applications</h4>
+                                <ul class="space-y-3">
+                                    <li onclick="openModal('db_rating')" class="interactive-card bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex justify-between items-center">
+                                        <span class="font-bold text-slate-700 text-sm">1. Rating Validation</span>
+                                        <i class="ph-bold ph-caret-right text-rose-500"></i>
+                                    </li>
+                                    <li onclick="openModal('db_critical')" class="interactive-card bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex justify-between items-center">
+                                        <span class="font-bold text-slate-700 text-sm">2. Critical Talent Rewards</span>
+                                        <i class="ph-bold ph-caret-right text-rose-500"></i>
+                                    </li>
+                                    <li onclick="openModal('db_turnover')" class="interactive-card bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex justify-between items-center">
+                                        <span class="font-bold text-slate-700 text-sm">3. Turnover Analysis</span>
+                                        <i class="ph-bold ph-caret-right text-rose-500"></i>
+                                    </li>
+                                    <li onclick="openModal('db_fairness')" class="interactive-card bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex justify-between items-center">
+                                        <span class="font-bold text-slate-700 text-sm">4. Perception Audits</span>
+                                        <i class="ph-bold ph-caret-right text-rose-500"></i>
+                                    </li>
+                                    <li onclick="openModal('db_admin')" class="interactive-card bg-white p-3 rounded-lg border border-slate-200 shadow-sm flex justify-between items-center">
+                                        <span class="font-bold text-slate-700 text-sm">5. Admin Compliance</span>
+                                        <i class="ph-bold ph-caret-right text-rose-500"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-800 mb-4">3 Important Mindsets</h4>
+                                <ul class="space-y-3">
+                                    <li onclick="openModal('mind_problem')" class="interactive-card bg-rose-50 p-4 rounded-lg border border-rose-100 flex justify-between items-center">
+                                        <span class="font-bold text-rose-900 text-sm">1. Understand the Real Problem</span>
+                                        <i class="ph-bold ph-arrows-in text-rose-500"></i>
+                                    </li>
+                                    <li onclick="openModal('mind_forces')" class="interactive-card bg-rose-50 p-4 rounded-lg border border-rose-100 flex justify-between items-center">
+                                        <span class="font-bold text-rose-900 text-sm">2. Understand Influencing Forces</span>
+                                        <i class="ph-bold ph-arrows-in text-rose-500"></i>
+                                    </li>
+                                    <li onclick="openModal('mind_numbers')" class="interactive-card bg-rose-50 p-4 rounded-lg border border-rose-100 flex justify-between items-center">
+                                        <span class="font-bold text-rose-900 text-sm">3. Think Beyond Numbers</span>
+                                        <i class="ph-bold ph-arrows-in text-rose-500"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: MONITORING -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-300 group/card">
+                <button onclick="toggleCard('card5', 'icon5')" class="w-full px-6 py-6 text-left flex justify-between items-center focus:outline-none">
+                    <div class="flex items-center gap-5">
+                        <div class="bg-sky-50 text-sky-600 p-4 rounded-2xl group-hover/card:bg-sky-600 group-hover/card:text-white transition-colors duration-300">
+                            <i class="ph ph-radar text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800">5. Monitoring</h3>
+                            <p class="text-sm text-slate-500 font-medium mt-1">Compensation as Continuous Change Management</p>
+                        </div>
+                    </div>
+                    <i id="icon5" class="ph ph-caret-down text-2xl text-slate-400 chevron"></i>
+                </button>
+                <div id="card5" class="accordion-content px-6 bg-slate-50">
+                    <div class="py-8 border-t border-slate-200">
+                        
+                        <div class="text-center mb-8">
+                            <p class="text-slate-700 leading-relaxed max-w-2xl mx-auto">
+                                Many organizations treat compensation design as a one-time project (which is a fantastic way to write a resignation letter). Environments change constantly. <strong>Monitoring is a permanent change-management process.</strong> You don't lock the steering wheel, hit the gas, and take a nap. You adjust.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div onclick="openModal('mon_difficult')" class="interactive-card bg-white border border-slate-200 p-6 rounded-xl flex items-center justify-between">
+                                <div>
+                                    <h4 class="text-lg font-bold text-slate-800 mb-1">Why Change is Difficult</h4>
+                                    <p class="text-sm text-slate-500">The human and operational friction.</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
+                                    <i class="ph-bold ph-plus"></i>
+                                </div>
+                            </div>
+                            
+                            <div onclick="openModal('mon_requirements')" class="interactive-card bg-sky-900 text-white p-6 rounded-xl shadow-md flex items-center justify-between">
+                                <div>
+                                    <h4 class="text-lg font-bold mb-1">3 Transformation Requirements</h4>
+                                    <p class="text-sm text-sky-300">The blueprint for successful pivots.</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-sky-800 flex items-center justify-center text-white">
+                                    <i class="ph-bold ph-arrow-circle-right text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Global Modal Overlay -->
+    <div id="global-modal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm opacity-0 transition-opacity" aria-hidden="true" onclick="closeModal()"></div>
+      
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <!-- Modal Panel -->
+            <div id="modal-panel" class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                
+                <!-- Header -->
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div id="modal-icon-container" class="p-2 rounded-lg bg-brand-100 text-brand-600">
+                            <i id="modal-icon" class="ph ph-info text-2xl"></i>
+                        </div>
+                        <h3 id="modal-title" class="text-xl font-bold text-slate-800 leading-6">Modal Title</h3>
+                    </div>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition-colors focus:outline-none">
+                        <i class="ph ph-x text-lg"></i>
+                    </button>
+                </div>
+                
+                <!-- Body -->
+                <div class="bg-white px-6 py-6 sm:p-8">
+                    <div id="modal-content" class="text-sm text-slate-600 space-y-4 leading-relaxed text-base">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 sm:flex sm:flex-row-reverse">
+                    <button type="button" onclick="closeModal()" class="mt-3 inline-flex w-full justify-center rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 sm:mt-0 sm:w-auto transition-colors">
+                      Close Window
+                    </button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script>
+        // --- ACCORDION LOGIC ---
+        let allOpen = false;
+
+        function toggleCard(cardId, iconId) {
+            const content = document.getElementById(cardId);
+            const icon = document.getElementById(iconId);
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.classList.remove('open');
+                content.style.paddingBottom = "0px";
+            } else {
+                content.classList.add('open');
+                icon.classList.add('open');
+                content.style.paddingBottom = "1.5rem";
+            }
+            updateToggleButtonState();
+        }
+
+        function toggleAll() {
+            const contents = document.querySelectorAll('.accordion-content');
+            const icons = document.querySelectorAll('.chevron');
+            const btn = document.getElementById('toggleAllBtn');
+
+            allOpen = !allOpen;
+
+            contents.forEach(content => {
+                if(allOpen) {
+                    content.classList.add('open');
+                    content.style.paddingBottom = "1.5rem";
+                } else {
+                    content.classList.remove('open');
+                    content.style.paddingBottom = "0px";
+                }
+            });
+
+            icons.forEach(icon => {
+                if(allOpen) icon.classList.add('open');
+                else icon.classList.remove('open');
+            });
+
+            btn.innerText = allOpen ? "Collapse All Pillars" : "Expand All Pillars";
+            if(allOpen) {
+                btn.classList.add('bg-brand-600', 'text-white');
+                btn.classList.remove('bg-brand-50', 'text-brand-700');
+            } else {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-brand-50', 'text-brand-700');
+            }
+        }
+
+        function updateToggleButtonState() {
+            const contents = document.querySelectorAll('.accordion-content');
+            const btn = document.getElementById('toggleAllBtn');
+            const openCount = document.querySelectorAll('.accordion-content.open').length;
+            
+            if(openCount === contents.length) {
+                allOpen = true;
+                btn.innerText = "Collapse All Pillars";
+                btn.classList.add('bg-brand-600', 'text-white');
+                btn.classList.remove('bg-brand-50', 'text-brand-700');
+            } else {
+                allOpen = false;
+                btn.innerText = "Expand All Pillars";
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-brand-50', 'text-brand-700');
+            }
+        }
+
+        // --- MODAL DATA (EXTREME DEPTH FROM PDF) ---
+        const modalData = {
+            // EXPERTISE: 4 LEVELS
+            'exp_basic': {
+                title: 'Basic Expertise (Awareness Level)', icon: 'ph-user',
+                content: `<p><strong>Who:</strong> Expected from Line Managers.</p>
+                          <p><strong>What it means:</strong> At this stage, an individual understands compensation terminology, core concepts, common practices, applications, and vendors or systems.</p>
+                          <p>A manager at this stage can understand conversations about salary bands, performance pay, market benchmarks, or incentive structures. But they still require guidance. <em>(Basically, they know enough to be dangerous, so keep an eye on them!)</em></p>`
+            },
+            'exp_operational': {
+                title: 'Operational Expertise (Execution Reliability)', icon: 'ph-check-square',
+                content: `<p><strong>Who:</strong> Realistic for HR generalists, entry-level compensation professionals, and most managers.</p>
+                          <p><strong>What it means:</strong> At this stage, the person can implement existing compensation programs. They may not design systems independently yet, but they can execute processes, follow frameworks, conduct compensation cycles, and administer programs under guidance.</p>
+                          <p>A strong operational professional ensures organizational consistency. This is similar to how airline pilots follow rigorous operational checklists even when the aircraft design came from engineers. <strong>You are the safe pair of hands keeping the plane in the air.</strong></p>`
+            },
+            'exp_tactical': {
+                title: 'Tactical Expertise (Strategic Alignment)', icon: 'ph-target',
+                content: `<p><strong>Who:</strong> Expected from experienced compensation professionals.</p>
+                          <p><strong>What it means:</strong> Here, professionals begin creating and implementing compensation systems with minimal external support. They can diagnose compensation issues, coach managers, customize programs, and solve organizational problems.</p>
+                          <p><strong>Real-World Insight:</strong> A tactical expert may realize that a company's attrition problem is not actually about low salaries. Instead, it may be caused by poor differentiation between high and average performers. <em>That insight changes the entire solution—this is where you start earning your weight in gold.</em></p>`
+            },
+            'exp_strategic': {
+                title: 'Strategic Expertise (Enterprise Lever)', icon: 'ph-crown',
+                content: `<p><strong>Who:</strong> Top-tier Compensation Leaders and CHROs.</p>
+                          <p><strong>What it means:</strong> Strategic experts design compensation philosophy, guide enterprise-wide decisions, troubleshoot systemic issues, and shape organizational culture through compensation. Compensation is treated as a business lever.</p>
+                          <p>These experts understand that pay systems influence innovation, risk-taking, collaboration, retention, and succession. <strong>For example:</strong> A startup may intentionally design aggressive variable pay because it wants entrepreneurial behavior, while a mature manufacturer may prefer stability-oriented pay structures. <br><br><strong>Welcome to the big leagues. Your decisions here don't just change payslips; they change company trajectories.</strong></p>`
+            },
+
+            // EXPERTISE: 6 BUILDING BLOCKS
+            'bb_base': { title: '1. Designing Base Pay Programs', icon: 'ph-money', content: `<p>Covers salary structures, pay bands, increments, and compensation architecture. This is the foundation layer. Without a stable base-pay system, all advanced reward structures become unstable.</p>` },
+            'bb_variable': { title: '2. Designing Variable Pay Programs', icon: 'ph-trend-up', content: `<p>Includes bonuses, incentives, commissions, performance-linked rewards, and long-term incentive systems. This is where organizations influence performance behavior directly.</p><p><strong>Example:</strong> Sales incentives influence selling behavior. Startup ESOPs influence long-term commitment.</p>` },
+            'bb_strategy': { title: '3. Integrating with Business Strategy', icon: 'ph-strategy', content: `<p>This separates administrative HR from strategic HR. The question shifts from <em>"What should we pay?"</em> to <em>"What compensation structure helps the business win?"</em></p><p><strong>Example:</strong> A consulting company may reward expertise depth. A retail company may reward operational efficiency.</p>` },
+            'bb_legal': { title: '4. Legal and Regulatory Compliance', icon: 'ph-scales', content: `<p>Compensation decisions carry legal implications. Poorly designed systems can create discrimination claims, compliance penalties, wage violations, or reputational damage. Professionals require legal awareness in addition to business understanding.</p>` },
+            'bb_comm': { title: '5. Communicating Compensation', icon: 'ph-chats', content: `<p>One of the biggest failures in organizations is not compensation design—it is communication. Employees often react negatively not because outcomes are unfair, but because reasoning is unclear. A poorly communicated pay decision creates distrust. An effectively communicated decision creates transparency.</p>` },
+            'bb_total': { title: '6. Total Rewards Programs', icon: 'ph-gift', content: `<p>Compensation is only one component of employee value. Modern organizations think in terms of total rewards, which may include benefits, recognition, learning, career growth, flexibility, and wellbeing. Employees evaluate organizations holistically.</p>` },
+
+            // EXPERTISE: 8 DIFFERENTIATORS
+            'diff_tech': { title: 'Technical Mastery', icon: 'ph-wrench', content: `<p>Strong command over compensation systems, mathematical frameworks, and core reward concepts.</p>` },
+            'diff_strategic': { title: 'Strategic Business Understanding', icon: 'ph-chess-piece', content: `<p>The ability to connect human capital rewards directly with broader organizational and financial goals.</p>` },
+            'diff_analytics': { title: 'Analytical Skills & Details', icon: 'ph-chart-bar', content: `<p>The capability to interpret deep data accurately and avoid flawed conclusions when reviewing payroll and market statistics.</p>` },
+            'diff_comm': { title: 'Communication & Connection', icon: 'ph-users', content: `<p>The ability to explain incredibly complex financial and compensation concepts clearly, thereby building trust with employees and leadership.</p>` },
+            'diff_adapt': { title: 'Adaptability & Flexibility', icon: 'ph-arrows-clockwise', content: `<p>Compensation environments constantly evolve. Rigid thinking becomes dangerous during market shifts or organizational pivots.</p>` },
+            'diff_passion': { title: 'Passion & Proactivity', icon: 'ph-fire', content: `<p>The best professionals do not wait for complaints; they anticipate issues (like market rate hikes) before they become full-blown attrition crises.</p>` },
+            'diff_learning': { title: 'Continuous Learning', icon: 'ph-books', content: `<p>Markets, technologies, workforce expectations, and labor regulations evolve continuously. You must keep learning to stay compliant and competitive.</p>` },
+            'diff_dev': { title: 'Development Support Systems', icon: 'ph-tree-structure', content: `<p><strong>What this really means in this context:</strong></p><p>Top performers don't grow in isolation. They actively build and utilize strong mentorship networks, learning infrastructure, and organizational support. This system accelerates their own capability growth and helps them scale their expertise to the managers working under them.</p>` },
+
+            // METHODOLOGIES
+            'meth_phil': { title: 'Compensation Philosophy', icon: 'ph-bank', content: `<p>A compensation philosophy defines the organization's core beliefs about pay.</p>
+                          <p>It answers questions like:<br>• What do we reward?<br>• What kind of behavior matters?<br>• How competitive should we be?<br>• What balance exists between fairness and performance differentiation?</p>
+                          <p>It attempts to achieve 5 competing outcomes simultaneously: attract talent, retain talent, reward performance, maintain competitiveness, and ensure legal equity. Philosophy helps you decide your priorities when these goals clash. <em>(Spoiler: They will always clash. That's why you're here.)</em></p>`},
+            
+            'meth_strat': { title: 'Compensation Strategy (5 Elements)', icon: 'ph-target', content: `<p>If philosophy defines beliefs, strategy defines execution (<em>"How exactly will we distribute rewards?"</em>). It contains 5 core components:</p>
+                           <ul class="space-y-3 mt-3">
+                               <li><strong>1. Affordability:</strong> Every decision begins with financial reality. What can the organization sustainably afford for at least 2 successive years?</li>
+                               <li><strong>2. Pay Markets:</strong> You don't compete in abstract theory. A bank may compete with tech firms for data scientists. You must use benchmark jobs and salary surveys.</li>
+                               <li><strong>3. Competitive Level:</strong> Where do you position yourself? 25th, 50th, or 75th percentile? High-growth startups may pay above market; prestigious brands may rely less on cash.</li>
+                               <li><strong>4. Mix of Elements:</strong> The percentage allocation between base, annual, and long-term incentives. The more uncertain the business environment, the more organizations may prefer variable compensation.</li>
+                               <li><strong>5. Employee Contribution:</strong> Compensation is no longer only about rewarding past contribution. It is increasingly about securing future capability (differentiating pay for high-potentials and successors).</li>
+                           </ul>`},
+            
+            'meth_admin': { title: 'Salary Administration', icon: 'ph-gear', content: `<p>A brilliant strategy without disciplined execution collapses quickly. Administration converts philosophy into daily operational reality.</p>
+                           <p>This machinery includes:<br>• Position descriptions<br>• Job evaluation<br>• Salary surveys<br>• Salary structures<br>• Performance evaluation<br>• Merit increases & Promotions</p>
+                           <p><strong>The Evolution: Variable Merit Pay.</strong> Traditional merit increases became permanently embedded into base salary. Modern organizations are shifting to models where performance rewards are earned annually but <em>not</em> permanently frozen into fixed base pay, protecting organizational flexibility.</p>`},
+
+            // DECISION TOOLS
+            'dt_tools': { title: 'Tools as Navigation Systems', icon: 'ph-compass', content: `<p>Decision-making tools emerged to help organizations evaluate options, compare methodologies, and monitor outcomes. Think of them as navigation systems.</p>
+                          <p><strong>Industry Context Examples:</strong><br>• A startup optimizing speed may prefer aggressive incentive systems and OKRs.<br>• A hospital may prioritize stability, strict job evaluation frameworks (like Hay Group), and precision compliance.<br><br>The same compensation design cannot serve both equally well. Tools help you choose. <em>(Because copy-pasting Google's HR policy into a steel plant is a terrible idea.)</em></p>`},
+            'q_exist': { title: '1. Why does the program exist?', icon: 'ph-question', content: `<p>Every reward program must answer this. If the purpose is unclear, the program becomes purely symbolic rather than strategic. Is it to drive sales? Retain executives? Boost morale? <em>Or did someone just read a trending article on LinkedIn and panic?</em></p>`},
+            'q_meaning': { title: '2. Why is it meaningful to employees?', icon: 'ph-heart', content: `<p>Employees only value programs they emotionally and practically understand. If an employee doesn't understand how a complex stock option vests, it holds zero retention value to them.</p>`},
+            'q_advantage': { title: '3. How does it create competitive advantage?', icon: 'ph-trend-up', content: `<p>Compensation is an investment. If a reward program does not strengthen organizational capability, culture, retention, performance, or differentiation, the system eventually becomes financially inefficient.</p>`},
+
+            // DATABASES
+            'db_rating': { title: '1. Rating Validation', icon: 'ph-star', content: `<p><strong>Do high ratings actually correlate with organizational success?</strong><br>If everyone in a department is rated 5/5, but the department failed its financial targets, your performance system lacks credibility. Big data spots this discrepancy.`},
+            'db_critical': { title: '2. Critical Talent Rewards', icon: 'ph-medal', content: `<p><strong>Are high performers and successors being compensated appropriately?</strong><br>Data allows you to isolate your top 10% critical talent and verify if their total rewards are actually higher than average performers to prevent retention risks.`},
+            'db_turnover': { title: '3. Turnover Analysis', icon: 'ph-user-minus', content: `<p><strong>Are employees leaving because of pay dissatisfaction?</strong><br>If yes, which employee groups are most affected? Cross-referencing exit data with demographic and pay data reveals systemic design flaws.`},
+            'db_fairness': { title: '4. Perception Audits', icon: 'ph-scales', content: `<p><strong>Is pay perceived as fair?</strong><br>Employee perception matters enormously. Even technically correct systems fail when employees perceive them as unfair. Perception influences trust, engagement, morale, and retention.`},
+            'db_admin': { title: '5. Admin Compliance', icon: 'ph-clipboard-text', content: `<p><strong>Are managers implementing the strategy consistently?</strong><br>A strategy may look brilliant on paper, but analytics can reveal massive gaps between policy intent and actual operational execution by line managers.`},
+
+            'mind_problem': { title: '1. Understand the Real Business Problem', icon: 'ph-warning', content: `<p>Do not collect data simply because it exists (cognitive overload). Always begin with the actual business issue you are trying to solve.</p>`},
+            'mind_forces': { title: '2. Understand All Influencing Forces', icon: 'ph-arrows-out', content: `<p>Employee behavior rarely has a single cause. Compensation interacts with leadership quality, career growth, culture, workload, and flexibility. Pay is only one piece of the puzzle.</p>`},
+            'mind_numbers': { title: '3. Think Beyond Numbers', icon: 'ph-brain', content: `<p>Not every organizational factor can be statistically measured. Human emotion, trust, aspiration, fear, and belonging influence outcomes profoundly. Analytics must therefore <strong>support judgment - not replace it.</strong></p>`},
+
+            // MONITORING
+            'mon_difficult': { title: 'Why Compensation Change is Difficult', icon: 'ph-warning-circle', content: `<p>Changing compensation systems is emotionally and operationally complex because it affects identity, fairness perceptions, motivation, lifestyle expectations, and career confidence.</p><p>Additionally, it requires simultaneous changes across HR systems, manager capability, communication processes, recruiting strategy, and budgeting.</p><p>Managers especially face extremely difficult conversations during these transitions.</p>`},
+            'mon_requirements': { title: '3 Transformation Requirements', icon: 'ph-rocket-launch', content: `<ul class="space-y-4">
+                                  <li><strong>1. Leadership Support:</strong> Without executive backing, compensation transformation loses momentum rapidly.</li>
+                                  <li><strong>2. Pragmatic Segmentation:</strong> Different workforce groups have different needs. Organizations must recognize meaningful workforce differences rather than treating everyone identically.</li>
+                                  <li><strong>3. Comprehensive Change Management:</strong> Organizations must meticulously manage communication, implementation, adoption, manager readiness, and employee understanding. It balances present operational needs with future strategic direction.</li>
+                                  </ul>`}
+        };
+
+        // --- MODAL LOGIC ---
+        const modal = document.getElementById('global-modal');
+        const backdrop = document.getElementById('modal-backdrop');
+        const panel = document.getElementById('modal-panel');
+        
+        function openModal(key) {
+            const data = modalData[key];
+            if(!data) return;
+
+            // Populate Content
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-content').innerHTML = data.content;
+            
+            const iconEl = document.getElementById('modal-icon');
+            iconEl.className = `ph ${data.icon} text-2xl`;
+
+            // Display Modal
+            modal.classList.remove('hidden');
+            
+            // Trigger Animations (slight delay for DOM to register display:block)
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                backdrop.classList.add('opacity-100');
+                
+                panel.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                panel.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            // Reverse Animations
+            backdrop.classList.remove('opacity-100');
+            backdrop.classList.add('opacity-0');
+            
+            panel.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+            panel.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+
+            // Hide after animation finishes
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // matches the transition duration
+        }
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
