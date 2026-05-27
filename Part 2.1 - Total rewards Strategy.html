@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Rewards Strategy</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Custom Theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom CSS for Advanced Interactions and Styling */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.05);
+        }
+
+        html.dark {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* Reading Progress Bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            width: 0%;
+            z-index: 100;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered reveals for lists */
+        .stagger-1 { transition-delay: 100ms; }
+        .stagger-2 { transition-delay: 200ms; }
+        .stagger-3 { transition-delay: 300ms; }
+        .stagger-4 { transition-delay: 400ms; }
+        .stagger-5 { transition-delay: 500ms; }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Flowchart Path Line */
+        .flow-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            background: linear-gradient(to bottom, #0ea5e9 0%, transparent 100%);
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+        }
+        html.dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+
+        /* Poetic text blocks spacing */
+        .staccato-text p {
+            margin-bottom: 0.5rem;
+        }
+        .staccato-text p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Progress Bar -->
+    <div id="progress-bar"></div>
+
+    <!-- Navigation / Controls -->
+    <nav class="fixed top-0 w-full p-6 flex justify-end z-50 mix-blend-difference text-white">
+        <button id="theme-toggle" class="p-2 rounded-full hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/10" aria-label="Toggle Dark Mode">
+            <svg id="moon-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            <svg id="sun-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden px-6 pt-20 pb-12">
+        <!-- Background decorative elements -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+        
+        <div class="max-w-4xl mx-auto text-center z-10 reveal">
+            <p class="text-sm md:text-base font-semibold tracking-widest uppercase text-brand-600 dark:text-brand-500 mb-6">Organizational Psychology</p>
+            <h1 class="text-5xl md:text-7xl font-serif font-bold leading-tight mb-8">
+                Total Rewards
+                <span class="block text-2xl md:text-4xl mt-4 font-sans font-light text-slate-600 dark:text-slate-400">
+                    — The Thing Companies Accidentally Discover After Employees Start Leaving
+                </span>
+            </h1>
+            <div class="mt-16 animate-bounce">
+                <svg class="w-6 h-6 mx-auto text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-6 py-12 space-y-32 text-lg md:text-xl leading-relaxed">
+
+        <!-- The Truth -->
+        <section class="reveal staccato-text">
+            <p class="font-bold text-2xl mb-8">Let’s start with the truth.</p>
+            <p>Most organizations do not suddenly wake up one morning and say:</p>
+            
+            <blockquote class="my-8 pl-6 border-l-4 border-brand-500 italic text-2xl md:text-3xl font-serif text-slate-700 dark:text-slate-300">
+                “You know what would be fun?<br>
+                Building a sophisticated total rewards strategy.”
+            </blockquote>
+            
+            <p class="font-bold">No.</p>
+            <p>Usually what happens is this:</p>
+        </section>
+
+        <!-- The Pain Flowchart -->
+        <section class="reveal relative py-12">
+            <div class="flow-line"></div>
+            <div class="space-y-12 relative z-10 flex flex-col items-center text-center">
+                
+                <div class="glass-card px-8 py-4 rounded-full font-semibold shadow-md reveal stagger-1 w-full max-w-sm border border-red-500/20">
+                    Top performers leave
+                </div>
+                <div class="text-brand-500 font-bold">↓</div>
+                
+                <div class="glass-card px-8 py-4 rounded-full font-semibold shadow-md reveal stagger-2 w-full max-w-sm">
+                    Hiring becomes painful
+                </div>
+                <div class="text-brand-500 font-bold">↓</div>
+                
+                <div class="glass-card px-8 py-4 rounded-full font-semibold shadow-md reveal stagger-3 w-full max-w-sm">
+                    Managers panic
+                </div>
+                <div class="text-brand-500 font-bold">↓</div>
+                
+                <div class="glass-card px-8 py-4 rounded-2xl font-semibold shadow-md reveal stagger-4 w-full max-w-sm">
+                    LinkedIn posts about “culture” increase mysteriously
+                </div>
+                <div class="text-brand-500 font-bold">↓</div>
+                
+                <div class="glass-card px-8 py-6 rounded-2xl font-semibold shadow-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 reveal stagger-5 w-full max-w-md transform scale-105">
+                    <p class="text-sm opacity-80 mb-2 uppercase tracking-wide">Leadership realizes:</p>
+                    <p class="text-xl">“Maybe salary alone is not the issue.”</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center reveal">
+                <p class="text-2xl font-serif font-semibold text-brand-600 dark:text-brand-400">And that is where the journey toward Total Rewards begins.</p>
+            </div>
+        </section>
+
+        <!-- What is it really? -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold mb-8">So… What is Total Rewards REALLY?</h2>
+            <p>Most beginners think total rewards means:</p>
+            
+            <div class="flex flex-wrap items-center justify-center gap-4 my-10 font-mono text-sm md:text-base">
+                <span class="bg-slate-100 dark:bg-slate-800 px-6 py-3 rounded-lg shadow-inner">Salary</span>
+                <span class="font-bold text-xl">+</span>
+                <span class="bg-slate-100 dark:bg-slate-800 px-6 py-3 rounded-lg shadow-inner">Bonus</span>
+                <span class="font-bold text-xl">+</span>
+                <span class="bg-slate-100 dark:bg-slate-800 px-6 py-3 rounded-lg shadow-inner">Benefits</span>
+            </div>
+            
+            <div class="staccato-text space-y-2">
+                <p>That’s like saying:</p>
+                <p class="italic text-slate-500 dark:text-slate-400">“A restaurant is just food.”</p>
+                <p>Technically correct.</p>
+                <p>Emotionally incomplete.</p>
+            </div>
+
+            <div class="my-12 glass-card p-8 rounded-2xl border-l-8 border-brand-500">
+                <p class="font-bold mb-4">Total rewards is actually:</p>
+                <p class="text-2xl font-serif mb-6">The complete experience of working somewhere.</p>
+                <p class="font-bold mb-4 text-sm uppercase tracking-wide text-slate-500">Or more strategically:</p>
+                <p class="text-xl italic text-slate-700 dark:text-slate-300">
+                    “Why should a talented human join this company, stay here, work hard, and not emotionally disconnect after three quarterly reviews?”
+                </p>
+            </div>
+            
+            <p class="font-bold text-2xl text-center text-brand-600 dark:text-brand-400">That’s total rewards.</p>
+        </section>
+
+        <!-- The BIG Mental Shift -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold mb-8 text-center">The BIG Mental Shift</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="glass-card p-8 rounded-2xl">
+                    <p class="font-bold mb-4 text-brand-600 dark:text-brand-400">Old companies believed employees worked mainly for:</p>
+                    <ul class="space-y-3 font-semibold">
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> money,</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> job security,</li>
+                        <li class="flex items-center gap-3"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> and retirement stability.</li>
+                    </ul>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl bg-brand-50 dark:bg-brand-950/30 border-brand-200 dark:border-brand-800">
+                    <p class="font-bold mb-4 text-brand-600 dark:text-brand-400">Modern organizations discovered something terrifying:</p>
+                    <p class="text-2xl font-bold text-red-500">Humans have emotions.</p>
+                </div>
+            </div>
+
+            <div class="staccato-text text-center space-y-2 mb-12">
+                <p>And unfortunately for management,</p>
+                <p>those emotions affect:</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full shadow-sm reveal stagger-1">performance,</span>
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full shadow-sm reveal stagger-2">retention,</span>
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full shadow-sm reveal stagger-3">innovation,</span>
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full shadow-sm reveal stagger-4">collaboration,</span>
+                <span class="px-6 py-2 bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200 rounded-full shadow-sm font-medium reveal stagger-5">and whether employees passive-aggressively update LinkedIn during meetings.</span>
+            </div>
+
+            <div class="text-center staccato-text reveal">
+                <p>So companies slowly realized:</p>
+                <blockquote class="my-6 text-2xl md:text-3xl font-serif text-brand-600 dark:text-brand-400 italic">
+                    “Oh. We are not only paying people.<br>
+                    We are managing motivation, meaning, growth, and human psychology.”
+                </blockquote>
+                <p class="font-bold text-xl">That realization created total rewards.</p>
+            </div>
+        </section>
+
+        <!-- The Mental Model Diagram -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold text-center mb-4">The Total Rewards Mental Model</h2>
+            <p class="text-center text-slate-500 dark:text-slate-400 mb-2">This is the most important diagram.</p>
+            <p class="text-center font-bold text-red-500 mb-12">Burn this into your brain.</p>
+
+            <!-- Interactive CSS Diagram representing the ASCII art -->
+            <div class="relative max-w-4xl mx-auto mb-16">
+                <!-- Top Level -->
+                <div class="flex justify-center mb-8">
+                    <div class="bg-brand-600 text-white px-10 py-4 rounded-xl shadow-xl font-bold text-2xl tracking-widest relative z-10 animate-float">
+                        TOTAL REWARDS
+                    </div>
+                </div>
+                
+                <!-- Connector Lines (Desktop/Tablet logic) -->
+                <div class="hidden sm:block absolute left-1/2 top-[60px] w-px h-10 bg-slate-300 dark:bg-slate-600 -translate-x-1/2"></div>
+                <div class="hidden sm:block absolute left-[12.5%] right-[12.5%] top-[100px] h-px bg-slate-300 dark:bg-slate-600"></div>
+                
+                <!-- The 4 Pillars Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 relative z-10">
+                    
+                    <!-- Vertical connectors from horizontal line -->
+                    <div class="hidden lg:block absolute left-[12.5%] top-[-32px] w-px h-8 bg-slate-300 dark:bg-slate-600"></div>
+                    <div class="hidden lg:block absolute left-[37.5%] top-[-32px] w-px h-8 bg-slate-300 dark:bg-slate-600"></div>
+                    <div class="hidden lg:block absolute left-[62.5%] top-[-32px] w-px h-8 bg-slate-300 dark:bg-slate-600"></div>
+                    <div class="hidden lg:block absolute left-[87.5%] top-[-32px] w-px h-8 bg-slate-300 dark:bg-slate-600"></div>
+
+                    <!-- Pillar Cards -->
+                    <div class="glass-card text-center p-6 rounded-xl hover:-translate-y-2 transition-transform duration-300 border-t-4 border-t-blue-500">
+                        <div class="text-3xl mb-4">💰</div>
+                        <h3 class="font-bold text-lg">Compensation</h3>
+                    </div>
+                    <div class="glass-card text-center p-6 rounded-xl hover:-translate-y-2 transition-transform duration-300 border-t-4 border-t-green-500">
+                        <div class="text-3xl mb-4">🏥</div>
+                        <h3 class="font-bold text-lg">Benefits</h3>
+                    </div>
+                    <div class="glass-card text-center p-6 rounded-xl hover:-translate-y-2 transition-transform duration-300 border-t-4 border-t-purple-500">
+                        <div class="text-3xl mb-4">🚀</div>
+                        <h3 class="font-bold text-lg">Careers</h3>
+                    </div>
+                    <div class="glass-card text-center p-6 rounded-xl hover:-translate-y-2 transition-transform duration-300 border-t-4 border-t-orange-500">
+                        <div class="text-3xl mb-4">⚖️</div>
+                        <h3 class="font-bold text-lg">Work-Life</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="staccato-text text-center">
+                <p>Every modern organization is trying to balance these four pillars.</p>
+                <p>And every employee is unconsciously evaluating all four.</p>
+                <br>
+                <p>Even when they say:</p>
+                <p class="font-serif italic text-2xl text-slate-600 dark:text-slate-400 my-4">“I’m leaving for better opportunities.”</p>
+                <p>That sentence could secretly mean:</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 my-8">
+                <span class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded text-sm reveal stagger-1">toxic manager,</span>
+                <span class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded text-sm reveal stagger-2">no growth,</span>
+                <span class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded text-sm reveal stagger-3">burnout,</span>
+                <span class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded text-sm reveal stagger-4">poor recognition,</span>
+                <span class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded text-sm reveal stagger-5">stagnant learning,</span>
+                <span class="px-4 py-2 bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800 rounded text-sm font-bold text-brand-600 dark:text-brand-400 reveal stagger-5">or yes… salary.</span>
+            </div>
+
+            <div class="text-center font-bold text-xl staccato-text">
+                <p>Usually all at once.</p>
+                <p class="text-slate-500">Like an emotional combo meal.</p>
+            </div>
+        </section>
+
+        <!-- Divder -->
+        <hr class="border-slate-200 dark:border-slate-800 w-1/3 mx-auto">
+
+        <!-- Pillar 1 -->
+        <section class="reveal">
+            <h2 class="text-4xl font-serif font-bold mb-6 text-blue-600 dark:text-blue-400">Pillar 1 — Compensation</h2>
+            <div class="staccato-text mb-8">
+                <p>This is the obvious one.</p>
+                <p>Salary.</p>
+                <p>Bonus.</p>
+                <p>Incentives.</p>
+                <p>Stock options.</p>
+            </div>
+            
+            <p class="mb-2">The part employees claim:</p>
+            <blockquote class="pl-4 border-l-2 border-slate-300 italic text-slate-600 dark:text-slate-400 mb-2">“isn’t everything.”</blockquote>
+            <p class="mb-10 font-bold">Right before resigning over it.</p>
+
+            <div class="glass-card p-8 rounded-2xl bg-blue-50/50 dark:bg-blue-900/10 mb-8">
+                <p class="font-bold text-xl mb-4">Now here’s the important thing.</p>
+                <p class="text-lg mb-4">Compensation is NOT just about paying people.</p>
+                <p class="text-2xl font-serif text-blue-700 dark:text-blue-300 font-bold">It is about signaling value.</p>
+            </div>
+
+            <p class="mb-6">Organizations use compensation to silently communicate:</p>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                <li class="glass-card p-4 rounded-lg flex items-center shadow-sm">What behavior matters?</li>
+                <li class="glass-card p-4 rounded-lg flex items-center shadow-sm">Who is important?</li>
+                <li class="glass-card p-4 rounded-lg flex items-center shadow-sm">What performance gets rewarded?</li>
+                <li class="glass-card p-4 rounded-lg flex items-center shadow-sm">What skills are scarce?</li>
+            </ul>
+
+            <div class="mb-8">
+                <p class="font-bold text-sm uppercase tracking-wide text-slate-500 mb-2">For example:</p>
+                <p class="mb-4">If salespeople receive massive bonuses while collaboration receives zero recognition…</p>
+                <p class="font-bold">Guess what happens?</p>
+            </div>
+
+            <div class="text-center my-8 staccato-text text-xl">
+                <p>Everyone suddenly becomes</p>
+                <p class="font-bold text-2xl text-red-500">“highly individualistic.”</p>
+                <p class="text-slate-500 text-base mt-2">Funny how that works.</p>
+            </div>
+
+            <div class="text-center glass-card p-8 rounded-full shadow-lg border-blue-500 border-b-4 mx-auto max-w-xl">
+                <p class="text-2xl font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">What gets rewarded gets repeated.</p>
+            </div>
+            <p class="text-center mt-6 font-semibold text-slate-600 dark:text-slate-400">That is one of the deepest truths in organizational behavior.</p>
+        </section>
+
+        <!-- Pillar 2 -->
+        <section class="reveal">
+            <h2 class="text-4xl font-serif font-bold mb-6 text-green-600 dark:text-green-400">Pillar 2 — Benefits</h2>
+            <p class="text-xl mb-8">Benefits are the things employees ignore until life attacks them personally.</p>
+            
+            <div class="flex flex-wrap gap-4 mb-8">
+                <span class="px-6 py-3 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-lg font-medium border border-green-200 dark:border-green-800">Insurance.</span>
+                <span class="px-6 py-3 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-lg font-medium border border-green-200 dark:border-green-800">Retirement plans.</span>
+                <span class="px-6 py-3 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-lg font-medium border border-green-200 dark:border-green-800">Wellness support.</span>
+                <span class="px-6 py-3 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-lg font-medium border border-green-200 dark:border-green-800">Paid leave.</span>
+            </div>
+
+            <div class="staccato-text mb-10 pl-6 border-l-4 border-slate-200 dark:border-slate-800">
+                <p>Young employees often think:</p>
+                <p class="italic text-slate-500">“I don’t care about benefits.”</p>
+                <br>
+                <p>Then one medical emergency arrives like:</p>
+                <p class="font-bold text-xl">“Allow me to introduce myself.”</p>
+                <p class="mt-4 font-serif text-green-600 dark:text-green-400">Suddenly insurance becomes spiritually important.</p>
+            </div>
+
+            <p class="mb-4">Benefits exist because organizations eventually realized:</p>
+            <div class="glass-card p-6 rounded-xl bg-slate-50 dark:bg-slate-800/50 text-center mb-4">
+                <p class="text-xl font-bold">stressed, financially insecure humans are not highly productive.</p>
+            </div>
+            <p class="text-slate-500 mb-10">Who knew.</p>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <p class="font-bold mb-4">Benefits create:</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3 text-lg"><div class="w-2 h-2 rounded-full bg-green-500"></div> stability,</li>
+                        <li class="flex items-center gap-3 text-lg"><div class="w-2 h-2 rounded-full bg-green-500"></div> security,</li>
+                        <li class="flex items-center gap-3 text-lg"><div class="w-2 h-2 rounded-full bg-green-500"></div> and emotional trust.</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-6 rounded-2xl border-green-500/30 border">
+                    <p class="leading-relaxed">And emotional trust matters because employees do not fully commit energy to organizations when survival anxiety is high.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pillar 3 -->
+        <section class="reveal">
+            <h2 class="text-4xl font-serif font-bold mb-6 text-purple-600 dark:text-purple-400">Pillar 3 — Careers</h2>
+            <p class="text-xl mb-8 font-semibold">Now this is where things become psychologically interesting.</p>
+            
+            <div class="glass-card p-8 rounded-2xl mb-10 relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl"></div>
+                <p class="mb-4">Employees can survive:</p>
+                <ul class="flex gap-4 flex-wrap mb-6">
+                    <li class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded font-mono text-sm">hard work,</li>
+                    <li class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded font-mono text-sm">pressure,</li>
+                    <li class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded font-mono text-sm">and temporary chaos…</li>
+                </ul>
+                <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">if they believe growth exists.</p>
+            </div>
+
+            <div class="text-center my-12">
+                <p class="mb-4">Humans tolerate pain surprisingly well when they believe:</p>
+                <p class="text-3xl font-serif italic text-slate-800 dark:text-slate-200">“This is leading somewhere.”</p>
+                <p class="mt-6 font-bold text-slate-500 uppercase tracking-widest text-sm">That is why career growth matters so much.</p>
+            </div>
+
+            <p class="mb-6 font-bold">Career rewards include:</p>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-12">
+                <div class="glass-card p-3 text-center rounded-lg text-sm shadow-sm">promotions,</div>
+                <div class="glass-card p-3 text-center rounded-lg text-sm shadow-sm">learning,</div>
+                <div class="glass-card p-3 text-center rounded-lg text-sm shadow-sm">stretch projects,</div>
+                <div class="glass-card p-3 text-center rounded-lg text-sm shadow-sm">mentoring,</div>
+                <div class="glass-card p-3 text-center rounded-lg text-sm shadow-sm">mobility,</div>
+                <div class="glass-card p-3 text-center rounded-lg text-sm shadow-sm">and future opportunities.</div>
+            </div>
+
+            <div class="border-l-4 border-red-400 pl-6 mb-10 py-2">
+                <p class="font-bold mb-4 text-red-500">Without career growth:</p>
+                <div class="staccato-text">
+                    <p>Work starts feeling like:</p>
+                    <p class="text-xl font-mono bg-slate-100 dark:bg-slate-800 p-2 inline-block rounded">repeating the same Excel sheet</p>
+                    <p class="text-xl font-mono bg-slate-100 dark:bg-slate-800 p-2 inline-block rounded">until death.</p>
+                </div>
+            </div>
+
+            <div class="staccato-text text-center mb-12">
+                <p>And that’s usually when:</p>
+                <p class="text-lg mt-4 reveal stagger-1">disengagement rises,</p>
+                <p class="text-lg reveal stagger-2">ambition drops,</p>
+                <p class="text-xl font-bold mt-2 text-brand-600 dark:text-brand-400 reveal stagger-3">and “Open to Work” quietly appears on LinkedIn.</p>
+            </div>
+
+            <div class="bg-gradient-to-r from-purple-600 to-brand-500 text-white p-8 rounded-2xl text-center shadow-xl">
+                <p class="text-3xl font-serif font-bold mb-2">Career growth is deeply connected to hope.</p>
+                <p class="text-purple-100 uppercase tracking-widest text-sm font-semibold mt-4">Organizations underestimate this constantly.</p>
+            </div>
+        </section>
+
+        <!-- Pillar 4 -->
+        <section class="reveal">
+            <h2 class="text-4xl font-serif font-bold mb-6 text-orange-500 dark:text-orange-400">Pillar 4 — Work-Life Experience</h2>
+            
+            <div class="mb-10">
+                <p class="mb-6">This pillar exploded after organizations discovered something revolutionary during remote work:</p>
+                <div class="glass-card p-8 rounded-2xl text-center border border-orange-200 dark:border-orange-900/50">
+                    <p class="text-2xl font-serif text-slate-800 dark:text-slate-200 leading-tight">
+                        Employees enjoy not commuting<br>
+                        2 hours daily to attend meetings<br>
+                        that could have been emails.
+                    </p>
+                </div>
+            </div>
+
+            <p class="font-bold mb-4">Work-life includes:</p>
+            <div class="flex flex-wrap gap-3 mb-12">
+                <span class="px-4 py-2 rounded-full border border-slate-300 dark:border-slate-700">flexibility,</span>
+                <span class="px-4 py-2 rounded-full border border-slate-300 dark:border-slate-700">autonomy,</span>
+                <span class="px-4 py-2 rounded-full border border-slate-300 dark:border-slate-700">wellbeing,</span>
+                <span class="px-4 py-2 rounded-full border border-slate-300 dark:border-slate-700">remote work,</span>
+                <span class="px-4 py-2 rounded-full border border-slate-300 dark:border-slate-700">psychological safety,</span>
+                <span class="px-4 py-2 rounded-full border border-slate-300 dark:border-slate-700">and work environment.</span>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl mb-12 bg-slate-50 dark:bg-slate-900/50">
+                <p class="mb-6">This pillar matters because modern employees increasingly evaluate:</p>
+                <p class="text-2xl font-bold text-center text-brand-600 dark:text-brand-400 mb-6">“Can I sustainably exist in this system?”</p>
+                <p class="text-center text-slate-500 mb-2">Not just:</p>
+                <p class="text-center italic text-lg">“What is the salary?”</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center mb-10">
+                <div>
+                    <p class="mb-4">Especially younger generations increasingly optimize for:</p>
+                    <ul class="space-y-2 font-mono text-sm">
+                        <li class="bg-orange-50 dark:bg-orange-900/20 p-2 rounded text-orange-800 dark:text-orange-200">autonomy,</li>
+                        <li class="bg-orange-50 dark:bg-orange-900/20 p-2 rounded text-orange-800 dark:text-orange-200">meaning,</li>
+                        <li class="bg-orange-50 dark:bg-orange-900/20 p-2 rounded text-orange-800 dark:text-orange-200">flexibility,</li>
+                        <li class="bg-orange-50 dark:bg-orange-900/20 p-2 rounded text-orange-800 dark:text-orange-200">and energy preservation.</li>
+                    </ul>
+                </div>
+                <div class="border-l-4 border-orange-400 pl-6">
+                    <p class="text-lg leading-relaxed font-semibold">Which explains why forcing employees into unnecessary meetings now creates emotional rebellion at industrial scale.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-slate-200 dark:border-slate-800 w-1/3 mx-auto">
+
+        <!-- Why it became necessary -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold mb-8">Why Total Rewards Became Necessary</h2>
+            <p class="mb-8 font-semibold text-brand-600 dark:text-brand-400">Here’s the real organizational story.</p>
+            
+            <div class="glass-card p-8 rounded-2xl mb-12 bg-slate-100 dark:bg-slate-800">
+                <p class="font-bold mb-6 text-sm uppercase tracking-wider text-slate-500">Old employment models worked like this:</p>
+                <div class="flex flex-col items-center gap-4 font-serif text-xl">
+                    <div class="text-center">Employee gives loyalty</div>
+                    <div class="text-slate-400">↓</div>
+                    <div class="text-center">Company gives stability</div>
+                    <div class="text-slate-400">↓</div>
+                    <div class="text-center font-bold">Everyone stays together forever</div>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <p class="text-2xl font-bold mb-6">Then the modern world happened.</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-medium">
+                    <div class="glass-card p-4 text-center rounded-lg">Technology changed.</div>
+                    <div class="glass-card p-4 text-center rounded-lg">Careers became nonlinear.</div>
+                    <div class="glass-card p-4 text-center rounded-lg">Talent became mobile.</div>
+                    <div class="glass-card p-4 text-center rounded-lg">Employees became less loyal.</div>
+                    <div class="glass-card p-4 text-center rounded-lg text-red-600 dark:text-red-400">Skill shortages increased.</div>
+                    <div class="glass-card p-4 text-center rounded-lg text-red-600 dark:text-red-400">Burnout increased.</div>
+                    <div class="glass-card p-4 text-center rounded-lg md:col-span-2 bg-brand-50 dark:bg-brand-900/20">Expectations evolved.</div>
+                </div>
+            </div>
+
+            <div class="text-center staccato-text">
+                <p>Suddenly organizations realized:</p>
+                <p class="text-2xl font-bold text-brand-600 dark:text-brand-400 my-6">Salary alone cannot retain talent anymore.</p>
+                <p>That realization forced companies to think holistically.</p>
+                <p class="font-serif italic text-xl mt-4">Which created total rewards strategy.</p>
+            </div>
+        </section>
+
+        <!-- Deep Insight & Personas -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold mb-4">The Deep Organizational Insight</h2>
+            <p class="text-2xl font-serif text-brand-600 dark:text-brand-400 mb-2">Different employees value different things.</p>
+            <p class="font-bold text-red-500 uppercase tracking-widest text-sm mb-12">This is critical.</p>
+
+            <p class="font-bold mb-6 uppercase text-sm text-slate-500">Example:</p>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <!-- Employee A -->
+                <div class="glass-card p-6 rounded-2xl border-t-4 border-blue-500">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xl mb-4">A</div>
+                    <p class="font-bold mb-2 text-lg">Employee A</p>
+                    <p class="text-sm text-slate-500 mb-4">may prioritize:</p>
+                    <ul class="space-y-1 text-sm font-semibold">
+                        <li>• salary,</li>
+                        <li>• incentives,</li>
+                        <li>• and aggressive growth.</li>
+                    </ul>
+                </div>
+                
+                <!-- Employee B -->
+                <div class="glass-card p-6 rounded-2xl border-t-4 border-green-500">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 font-bold text-xl mb-4">B</div>
+                    <p class="font-bold mb-2 text-lg">Employee B</p>
+                    <p class="text-sm text-slate-500 mb-4">may prioritize:</p>
+                    <ul class="space-y-1 text-sm font-semibold">
+                        <li>• flexibility,</li>
+                        <li>• wellbeing,</li>
+                        <li>• and family time.</li>
+                    </ul>
+                </div>
+
+                <!-- Employee C -->
+                <div class="glass-card p-6 rounded-2xl border-t-4 border-purple-500">
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-full flex items-center justify-center text-purple-600 dark:text-purple-400 font-bold text-xl mb-4">C</div>
+                    <p class="font-bold mb-2 text-lg">Employee C</p>
+                    <p class="text-sm text-slate-500 mb-4">may prioritize:</p>
+                    <ul class="space-y-1 text-sm font-semibold">
+                        <li>• learning,</li>
+                        <li>• prestige,</li>
+                        <li>• and future leadership opportunities.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center staccato-text text-xl mb-12">
+                <p class="font-bold">Same company.</p>
+                <p class="font-bold">Different psychological drivers.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl text-center">
+                <p class="mb-4">This is why modern organizations stopped using:</p>
+                <p class="text-2xl font-serif text-red-500 italic mb-6">“one-size-fits-all rewards.”</p>
+                <p class="font-bold text-lg text-slate-700 dark:text-slate-300">Because humans are inconveniently different.</p>
+            </div>
+        </section>
+
+        <!-- Segmentation -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold mb-8">This Leads to Workforce Segmentation</h2>
+            <p class="mb-8 text-xl">And THIS is where organizations become strategically intelligent.</p>
+
+            <div class="flex flex-col items-center gap-4 font-serif text-xl mb-12 glass-card p-8 rounded-2xl max-w-lg mx-auto">
+                <p class="font-sans text-sm font-bold uppercase text-slate-500 w-full text-left mb-2">Companies realized:</p>
+                <div class="text-center font-bold text-brand-600 dark:text-brand-400">Different talent groups<br>create different business value</div>
+                <div class="text-slate-400">↓</div>
+                <div class="text-center font-bold text-brand-600 dark:text-brand-400">So they need different reward strategies</div>
+            </div>
+
+            <div class="text-center mb-12">
+                <p class="font-bold text-2xl">This is workforce segmentation.</p>
+                <p class="text-slate-500">And it changed compensation forever.</p>
+            </div>
+
+            <p class="font-bold mb-6 uppercase text-sm text-slate-500">Example</p>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-10">
+                <div class="glass-card p-6 rounded-2xl">
+                    <p class="mb-4 text-slate-600 dark:text-slate-400">A company may heavily invest in:</p>
+                    <ul class="font-bold mb-4 text-brand-700 dark:text-brand-300">
+                        <li>AI researchers,</li>
+                        <li>senior product architects,</li>
+                        <li>and strategic leaders</li>
+                    </ul>
+                    <p class="text-sm bg-brand-50 dark:bg-brand-900/20 p-2 rounded">because those roles drive future competitive advantage.</p>
+                </div>
+                
+                <div class="glass-card p-6 rounded-2xl">
+                    <p class="mb-4 text-slate-600 dark:text-slate-400">Meanwhile some roles may receive:</p>
+                    <ul class="font-bold mb-4 text-slate-700 dark:text-slate-300">
+                        <li>stable pay,</li>
+                        <li>moderate growth,</li>
+                        <li>but lower strategic investment.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="staccato-text border-l-4 border-slate-300 dark:border-slate-700 pl-6 py-2">
+                <p>This sounds harsh emotionally.</p>
+                <p>But organizations operate on:</p>
+                <p class="text-xl font-bold text-brand-600 dark:text-brand-400 my-2">value creation logic.</p>
+                <p class="text-xl font-bold text-slate-400 my-2 line-through">Not emotional equality logic.</p>
+                <p class="mt-4 italic text-slate-500">That’s an important leadership realization.</p>
+            </div>
+        </section>
+
+        <!-- The REAL Purpose -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold mb-6">The REAL Purpose of Total Rewards</h2>
+            <div class="staccato-text mb-8">
+                <p class="text-brand-600 dark:text-brand-400 font-semibold">This is the deepest layer.</p>
+                <p>Total rewards is not about making employees “happy.”</p>
+                <p>That’s impossible anyway.</p>
+                <p class="italic text-slate-500 text-base">Someone will always open LinkedIn during appraisal season.</p>
+            </div>
+
+            <p class="font-bold text-xl mb-4">The real purpose is this:</p>
+            <div class="glass-card p-8 rounded-2xl text-center shadow-lg border-2 border-brand-500 mb-12 transform scale-105">
+                <p class="text-2xl md:text-3xl font-serif font-bold text-brand-700 dark:text-brand-300">Align employee motivation with organizational success.</p>
+            </div>
+            
+            <p class="text-center font-bold text-slate-400 uppercase tracking-widest text-sm mb-12">That’s the game.</p>
+
+            <div class="glass-card p-8 rounded-2xl mb-12">
+                <p class="mb-6 font-semibold text-slate-500">Organizations are trying to create systems where:</p>
+                <div class="flex flex-col items-center gap-4 font-serif text-2xl">
+                    <div class="text-center font-bold text-green-600 dark:text-green-400">Employees succeed</div>
+                    <div class="text-slate-400">↓</div>
+                    <div class="text-center font-bold text-blue-600 dark:text-blue-400">Organization succeeds</div>
+                    <div class="text-slate-400">↓</div>
+                    <div class="text-center font-bold text-purple-600 dark:text-purple-400">Both continue benefiting</div>
+                </div>
+            </div>
+
+            <p class="text-center text-xl font-bold mb-10">That alignment is the dream.</p>
+
+            <div class="staccato-text bg-red-50 dark:bg-red-900/10 p-8 rounded-2xl border border-red-100 dark:border-red-900/30">
+                <p class="font-bold text-red-600 dark:text-red-400 mb-4">And when alignment breaks:</p>
+                <div class="flex flex-col gap-2 font-mono text-slate-700 dark:text-slate-300">
+                    <p class="reveal stagger-1">attrition rises,</p>
+                    <p class="reveal stagger-2">culture weakens,</p>
+                    <p class="reveal stagger-3">trust drops,</p>
+                    <p class="font-bold text-lg text-red-700 dark:text-red-300 mt-2 reveal stagger-4">and organizations slowly decay internally.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Organizational Psychology -->
+        <section class="reveal">
+            <h2 class="text-3xl font-bold mb-8">Why Total Rewards Is Basically Organizational Psychology</h2>
+            <p class="mb-6 font-semibold text-brand-600 dark:text-brand-400">Because eventually companies realized:</p>
+            
+            <div class="text-center mb-10">
+                <p class="text-3xl font-serif italic mb-2">Humans do not work</p>
+                <p class="text-3xl font-serif italic text-slate-400">purely rationally.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+                <div class="glass-card p-4 rounded-xl text-center font-medium shadow-sm hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors">People compare.</div>
+                <div class="glass-card p-4 rounded-xl text-center font-medium shadow-sm hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors">People seek fairness.</div>
+                <div class="glass-card p-4 rounded-xl text-center font-medium shadow-sm hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors">People seek growth.</div>
+                <div class="glass-card p-4 rounded-xl text-center font-medium shadow-sm hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors">People seek meaning.</div>
+                <div class="glass-card p-4 rounded-xl text-center font-medium shadow-sm hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors">People seek recognition.</div>
+                <div class="glass-card p-4 rounded-xl text-center font-medium shadow-sm hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors">People seek security.</div>
+            </div>
+
+            <p class="text-center text-lg mb-12 leading-relaxed">
+                And organizations are constantly trying to design systems around those human realities.
+            </p>
+
+            <div class="glass-card p-8 rounded-2xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-center shadow-2xl">
+                <p class="font-bold mb-6 text-slate-300 dark:text-slate-600 uppercase tracking-wide text-sm">That’s why total rewards sits at the intersection of:</p>
+                <div class="flex flex-wrap justify-center gap-3 font-serif text-xl md:text-2xl">
+                    <span>psychology,</span>
+                    <span>business strategy,</span>
+                    <span>economics,</span>
+                    <span>leadership,</span>
+                    <span class="text-brand-400 dark:text-brand-600 font-bold">and culture.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Mental Model -->
+        <section class="reveal pb-24">
+            <h2 class="text-4xl font-bold text-center mb-4">Final Mental Model</h2>
+            <p class="text-center text-red-500 font-bold uppercase tracking-widest text-sm mb-12">If you remember nothing else, remember this:</p>
+            
+            <div class="bg-gradient-to-br from-brand-600 to-blue-800 text-white p-10 rounded-3xl shadow-2xl text-center mb-16 relative overflow-hidden">
+                <!-- Decorative BG inside card -->
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-black/20 rounded-full blur-2xl"></div>
+                
+                <p class="text-3xl font-bold tracking-widest mb-6 relative z-10">Total Rewards</p>
+                <p class="text-2xl font-serif text-brand-200 mb-6 relative z-10">=</p>
+                <p class="text-xl font-medium mb-8 relative z-10">The system organizations design<br>to</p>
+                
+                <div class="flex flex-wrap justify-center gap-4 font-bold text-2xl relative z-10 mb-8">
+                    <span class="bg-white/20 px-6 py-2 rounded-lg backdrop-blur-sm">attract,</span>
+                    <span class="bg-white/20 px-6 py-2 rounded-lg backdrop-blur-sm">motivate,</span>
+                    <span class="bg-white/20 px-6 py-2 rounded-lg backdrop-blur-sm">retain,</span>
+                    <span class="bg-white/20 px-6 py-2 rounded-lg backdrop-blur-sm text-brand-100">and direct human behavior.</span>
+                </div>
+            </div>
+
+            <div class="text-center staccato-text text-2xl md:text-3xl font-serif">
+                <p class="text-slate-400 line-through">Not just pay people.</p>
+                <p class="font-bold text-brand-600 dark:text-brand-400 my-4">Shape behavior.</p>
+                <p class="text-lg font-sans font-bold uppercase tracking-widest text-slate-500 mb-12">That’s the real game.</p>
+            </div>
+
+            <div class="text-center mt-16 pb-16 reveal border-t border-slate-200 dark:border-slate-800 pt-12">
+                <p class="text-2xl text-slate-700 dark:text-slate-300">And once you see that,</p>
+                <p class="text-2xl font-bold text-brand-600 dark:text-brand-400 mt-2">you start understanding organizations very differently.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Dark Mode Toggle ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('moon-icon');
+            const lightIcon = document.getElementById('sun-icon');
+
+            // Check system preference or localStorage
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                lightIcon.classList.remove('hidden');
+                darkIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                darkIcon.classList.remove('hidden');
+                lightIcon.classList.add('hidden');
+            }
+
+            themeToggleBtn.addEventListener('click', function() {
+                darkIcon.classList.toggle('hidden');
+                lightIcon.classList.toggle('hidden');
+
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            });
+
+            // --- Reading Progress Bar ---
+            const progressBar = document.getElementById('progress-bar');
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                progressBar.style.width = scrolled + '%';
+            });
+
+            // --- Scroll Reveal Animation using Intersection Observer ---
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Optional: Stop observing once revealed if you don't want them to hide again
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
